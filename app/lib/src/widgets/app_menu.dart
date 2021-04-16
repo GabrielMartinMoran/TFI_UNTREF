@@ -1,10 +1,22 @@
 import 'package:app/src/configs/pallete.dart';
+import 'package:app/src/widgets/app_navigator.dart';
+import 'package:app/src/widgets/app_router_delegate.dart';
 import 'package:app/src/widgets/menu_item.dart';
-import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class AppMenu extends StatelessWidget {
-  const AppMenu({Key key}) : super(key: key);
+class AppMenu extends StatefulWidget {
+  final Function navigateTo;
+  const AppMenu({Key key, this.navigateTo}) : super(key: key);
+
+  @override
+  _AppMenuState createState() => _AppMenuState(navigateTo);
+}
+
+class _AppMenuState extends State<AppMenu> {
+  final Function navigateTo;
+
+  _AppMenuState(this.navigateTo);
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +30,18 @@ class AppMenu extends StatelessWidget {
                 height: 30,
               ),
               MenuItem(
-                text: 'Inicio',
-                icon: Icons.home,
-                onTap: () {
-                  return context.beamToNamed('/', beamBackOnPop: true);
-                },
-              ),
+                  text: 'Inicio',
+                  icon: Icons.home,
+                  onTap: () {
+                    //return Navigator.of(context).pushNamed('/');
+                    return navigateTo('/');
+                  }),
               MenuItem(
                   text: 'Mis dispositivos',
                   icon: Icons.bluetooth,
                   onTap: () {
-                    var pages = context.currentBeamPages;
-                    return context.beamToNamed('/devices', beamBackOnPop: true);
-                    var beamer = Beamer.of(context);
-                    beamer.beamToNamed('/devices',
-                        beamBackOnPop: true, replaceCurrent: true);
+                    //return Navigator.of(context).pushNamed('/devices');
+                    return navigateTo('/devices');
                   })
             ],
           ),

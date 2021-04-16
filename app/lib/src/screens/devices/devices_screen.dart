@@ -1,8 +1,8 @@
-import 'package:beamer/beamer.dart';
+import 'package:app/src/screens/base_screen.dart';
 import 'package:flutter/material.dart';
 
-class DevicesScreen extends StatelessWidget {
-  const DevicesScreen({Key key}) : super(key: key);
+class DevicesScreen extends BaseScreen {
+  DevicesScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class DevicesScreen extends StatelessWidget {
       color: Colors.green,
       child: Center(
         child: ElevatedButton(
-          onPressed: () => Beamer.of(context).beamToNamed('/devices/add'),
+          onPressed: () => navigateTo('/devices/add'),
           child: Text("Agregar dispositivo"),
         ),
       ),

@@ -1,7 +1,8 @@
+import 'package:app/src/screens/base_screen.dart';
 import 'package:flutter/material.dart';
 
-class AddDeviceScreen extends StatelessWidget {
-  const AddDeviceScreen({Key key}) : super(key: key);
+class AddDeviceScreen extends BaseScreen {
+  AddDeviceScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
