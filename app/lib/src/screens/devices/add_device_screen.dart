@@ -9,7 +9,10 @@ class AddDeviceScreen extends BaseScreen {
     return Container(
       color: Colors.red,
       child: Center(
-        child: Text("ADD DEVICE"),
+        child: ElevatedButton(
+          onPressed: () => navigateTo('/devices/view/2'),
+          child: Text("Ver dispositivo 2"),
+        ),
       ),
     );
   }

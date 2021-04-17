@@ -1,9 +1,9 @@
-import 'package:app/src/configs/pallete.dart';
+import 'package:app/src/models/device.dart';
 import 'package:app/src/models/route_state.dart';
-import 'package:app/src/widgets/app_menu.dart';
-import 'package:app/src/widgets/app_navigator.dart';
-import 'package:app/src/widgets/app_router_delegate.dart';
-import 'package:app/src/widgets/router_information_parser.dart';
+import 'package:app/src/providers/devices_provider.dart';
+import 'package:app/src/services/devices_service.dart';
+import 'package:app/src/widgets/routing/app_router_delegate.dart';
+import 'package:app/src/widgets/routing/router_information_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,20 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<RouteState>(create: (_) => RouteState())
+        ChangeNotifierProvider<DevicesProvider>(
+            create: (_) => DevicesProvider())
       ],
-      /*child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Gestión de dispositivos',
-          home: Scaffold(
-              appBar: AppBar(
-                title: Text('Gestión de dispositivos'),
-                backgroundColor: Pallete.gray,
-              ),
-              body: MaterialApp.router(
-                  routeInformationParser: RouterInformationParser(),
-                  routerDelegate: AppRouterDelegate()),
-              drawer: AppMenu())),*/
       child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Gestión de dispositivos',

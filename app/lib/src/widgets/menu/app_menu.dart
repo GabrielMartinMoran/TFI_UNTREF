@@ -1,9 +1,6 @@
 import 'package:app/src/configs/pallete.dart';
-import 'package:app/src/widgets/app_navigator.dart';
-import 'package:app/src/widgets/app_router_delegate.dart';
-import 'package:app/src/widgets/menu_item.dart';
+import 'package:app/src/widgets/menu/menu_item.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AppMenu extends StatefulWidget {
   final Function navigateTo;

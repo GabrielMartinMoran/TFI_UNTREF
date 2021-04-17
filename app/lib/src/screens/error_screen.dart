@@ -2,7 +2,8 @@ import 'package:app/src/screens/base_screen.dart';
 import 'package:flutter/material.dart';
 
 class ErrorScreen extends BaseScreen {
-  ErrorScreen({Key key}) : super(key: key);
+  final String message;
+  ErrorScreen({Key key, @required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ErrorScreen extends BaseScreen {
             height: 100,
           ),
           Text(
-            'Parece la dirección ingresada no es válida',
+            message,
             style: TextStyle(fontSize: 40, color: Colors.black),
             textAlign: TextAlign.center,
           ),
