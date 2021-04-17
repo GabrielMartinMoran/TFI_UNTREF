@@ -16,6 +16,7 @@ class AppScaffold extends StatelessWidget {
           backgroundColor: Pallete.gray,
         ),
         body: child,
+        backgroundColor: Pallete.backgroundColor,
         drawer: AppMenu(navigateTo: navigateTo));
   }
 }

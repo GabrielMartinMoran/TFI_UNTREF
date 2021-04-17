@@ -1,7 +1,7 @@
-import 'package:app/src/screens/base_screen.dart';
+import 'package:app/src/screens/stateless_screen.dart';
 import 'package:flutter/material.dart';
 
-class ViewDeviceScreen extends BaseScreen {
+class ViewDeviceScreen extends StatelessScreen {
   final int deviceId;
   ViewDeviceScreen({Key key, @required this.deviceId}) : super(key: key);
 

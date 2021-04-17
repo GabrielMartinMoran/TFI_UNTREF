@@ -1,7 +1,7 @@
-import 'package:app/src/screens/base_screen.dart';
+import 'package:app/src/screens/stateless_screen.dart';
 import 'package:flutter/material.dart';
 
-class DevicesScreen extends BaseScreen {
+class DevicesScreen extends StatelessScreen {
   DevicesScreen({Key key}) : super(key: key);
 
   @override

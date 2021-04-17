@@ -28,6 +28,11 @@ class DevicesProvider with ChangeNotifier {
   }
 
   void _getData() {
-    service.getDevicesData().then((res) => devices = res);
+    try {
+      service.getDevicesData().then((res) => devices = res);
+    } catch (e) {
+      print(
+          'Ha ocurrido un error al tratar de obtener datos de los dispositivos: $e');
+    }
   }
 }

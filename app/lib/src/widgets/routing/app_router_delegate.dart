@@ -1,7 +1,7 @@
 import 'package:app/src/configs/routes.dart';
 import 'package:app/src/models/route_result.dart';
 import 'package:app/src/models/route_state.dart';
-import 'package:app/src/screens/base_screen.dart';
+import 'package:app/src/screens/stateless_screen.dart';
 import 'package:app/src/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -76,7 +76,7 @@ class AppRouterDelegate extends RouterDelegate<RouteState>
   void addRouteIfRequired(RouteResult routeResult, List<MaterialPage> pages,
       String path, Function screenGenerator) {
     if (!routeResult.shouldRender(path)) return;
-    BaseScreen screen;
+    StatelessScreen screen;
     if (!routeResult.isSameRoute(path) || routeResult.paramsCount(path) == 0) {
       screen = screenGenerator();
     } else {

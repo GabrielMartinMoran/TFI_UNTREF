@@ -26,6 +26,6 @@ class Measurement {
       };
 
   DateTime get datetime {
-    return new DateTime.fromMillisecondsSinceEpoch(timestamp.toInt());
+    return new DateTime.fromMillisecondsSinceEpoch(timestamp.toInt() * 1000);
   }
 }

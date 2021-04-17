@@ -24,10 +24,10 @@ class Device {
         "name": name,
       };
 
-  List<Measurement> getLasBunchOfTime(double lastMinutes) {
+  List<Measurement> getLasBunchOfTime(double lastSeconds) {
     final filtered = measurements
         .where((x) =>
-            DateTime.now().difference(x.datetime).inMinutes <= lastMinutes)
+            DateTime.now().difference(x.datetime).inSeconds <= lastSeconds)
         .toList();
     return filtered;
   }

@@ -1,7 +1,7 @@
-import 'package:app/src/screens/base_screen.dart';
+import 'package:app/src/screens/stateless_screen.dart';
 import 'package:flutter/material.dart';
 
-class ErrorScreen extends BaseScreen {
+class ErrorScreen extends StatelessScreen {
   final String message;
   ErrorScreen({Key key, @required this.message}) : super(key: key);
 

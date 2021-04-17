@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class BaseScreen extends StatelessWidget {
+class StatelessScreen extends StatelessWidget {
   Function navigateTo;
-  BaseScreen({Key key}) : super(key: key);
+  StatelessScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
