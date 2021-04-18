@@ -1,6 +1,8 @@
 import 'package:app/src/configs/pallete.dart';
+import 'package:app/src/providers/router_provider.dart';
 import 'package:app/src/widgets/menu/menu_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppMenu extends StatefulWidget {
   final Function navigateTo;
@@ -17,6 +19,7 @@ class _AppMenuState extends State<AppMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final routerProvider = Provider.of<RouterProvider>(context);
     return SafeArea(
       child: Drawer(
         child: Container(
@@ -31,14 +34,16 @@ class _AppMenuState extends State<AppMenu> {
                   icon: Icons.home,
                   onTap: () {
                     //return Navigator.of(context).pushNamed('/');
-                    return navigateTo('/');
+                    return routerProvider.navigateTo('/');
+                    //return navigateTo('/');
                   }),
               MenuItem(
                   text: 'Mis dispositivos',
                   icon: Icons.bluetooth,
                   onTap: () {
                     //return Navigator.of(context).pushNamed('/devices');
-                    return navigateTo('/devices');
+                    return routerProvider.navigateTo('/devices');
+                    //return navigateTo('/devices');
                   })
             ],
           ),

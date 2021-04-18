@@ -14,7 +14,7 @@ class DevicesCurrentChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final devicesProvider = Provider.of<DevicesProvider>(context);
-    return ListView(children: _getCharts(devicesProvider.devices, 120.0));
+    return Column(children: _getCharts(devicesProvider.devices, 120.0));
     /*Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: _getCharts(devicesProvider.devices, 120.0),
@@ -23,35 +23,43 @@ class DevicesCurrentChart extends StatelessWidget {
 
   _getCharts(List<Device> devices, double interval) {
     List<Widget> charts = [];
-    for (var device in devices) {
-      List<FlSpot> dataSpots = [];
-      double currentInterval = 0;
-      final filteredMeasurements = device.getLasBunchOfTime(interval);
-      for (var measurement in filteredMeasurements) {
-        currentInterval += measurement.current;
-        dataSpots.add(FlSpot(measurement.timestamp, measurement.current));
+    try {
+      for (var device in devices) {
+        charts.add(_generateChart(device, interval));
       }
-      currentInterval /= filteredMeasurements.length;
-      charts.add(Column(children: [
-        SizedBox(
-          height: 10,
-        ),
-        Text(device.name,
-            style: TextStyle(fontSize: 20, color: Pallete.fontColor)),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            height: 300,
-            child:
-                LineChart(_getLineChartData(dataSpots, 30.0, currentInterval)),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        )
-      ]));
+    } catch (e) {
+      print('Ha ocurrido un error al generar los graficos');
     }
+
     return charts;
+  }
+
+  Widget _generateChart(Device device, double interval) {
+    List<FlSpot> dataSpots = [];
+    double currentInterval = 0;
+    final filteredMeasurements = device.getLasBunchOfTime(interval);
+    for (var measurement in filteredMeasurements) {
+      currentInterval += measurement.current;
+      dataSpots.add(FlSpot(measurement.timestamp, measurement.current));
+    }
+    currentInterval /= filteredMeasurements.length;
+    return Column(children: [
+      SizedBox(
+        height: 10,
+      ),
+      Text(device.name,
+          style: TextStyle(fontSize: 20, color: Pallete.fontColor)),
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          height: 300,
+          child: LineChart(_getLineChartData(dataSpots, 30.0, currentInterval)),
+        ),
+      ),
+      SizedBox(
+        height: 20,
+      )
+    ]);
   }
 
   LineChartData _getLineChartData(

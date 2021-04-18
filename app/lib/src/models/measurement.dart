@@ -1,3 +1,5 @@
+import 'package:app/src/utils/date_converter.dart';
+
 class Measurement {
   Measurement({
     this.current,
@@ -25,7 +27,7 @@ class Measurement {
         "voltage": voltage,
       };
 
-  DateTime get datetime {
-    return new DateTime.fromMillisecondsSinceEpoch(timestamp.toInt() * 1000);
+  DateTime get utcDatetime {
+    return DateConverter.toUTCfromTimestamp(timestamp);
   }
 }

@@ -1,9 +1,10 @@
 import 'package:app/src/configs/routes.dart';
 import 'package:app/src/models/route_result.dart';
 import 'package:app/src/models/route_state.dart';
-import 'package:app/src/screens/stateless_screen.dart';
+import 'package:app/src/providers/router_provider.dart';
 import 'package:app/src/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppRouterDelegate extends RouterDelegate<RouteState>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<RouteState> {
@@ -20,6 +21,8 @@ class AppRouterDelegate extends RouterDelegate<RouteState>
 
   @override
   Widget build(BuildContext context) {
+    final routerProvider = Provider.of<RouterProvider>(context);
+    routerProvider.navigateTo = navigateTo;
     _pages = getPagesStack();
     return Navigator(
       key: navigatorKey,
@@ -76,13 +79,12 @@ class AppRouterDelegate extends RouterDelegate<RouteState>
   void addRouteIfRequired(RouteResult routeResult, List<MaterialPage> pages,
       String path, Function screenGenerator) {
     if (!routeResult.shouldRender(path)) return;
-    StatelessScreen screen;
+    StatelessWidget screen;
     if (!routeResult.isSameRoute(path) || routeResult.paramsCount(path) == 0) {
       screen = screenGenerator();
     } else {
       screen = screenGenerator(routeResult.getParams(path));
     }
-    screen.navigateTo = navigateTo;
     pages.add(MaterialPage(
         key: ValueKey(path), name: path, child: generateScreen(screen)));
   }

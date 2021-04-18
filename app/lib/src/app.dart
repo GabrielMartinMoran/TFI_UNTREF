@@ -1,6 +1,7 @@
 import 'package:app/src/models/device.dart';
 import 'package:app/src/models/route_state.dart';
 import 'package:app/src/providers/devices_provider.dart';
+import 'package:app/src/providers/router_provider.dart';
 import 'package:app/src/services/devices_service.dart';
 import 'package:app/src/utils/date_converter.dart';
 import 'package:app/src/utils/platform_checker.dart';
@@ -14,11 +15,12 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!PlatformChecker.isWeb()) DateConverter.getLocalTimezone();
+    DateConverter.initialize();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DevicesProvider>(
-            create: (_) => DevicesProvider())
+            create: (_) => DevicesProvider()),
+        Provider<RouterProvider>(create: (_) => RouterProvider())
       ],
       child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
