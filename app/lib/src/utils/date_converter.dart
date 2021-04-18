@@ -31,7 +31,7 @@ class DateConverter {
   }
 
   static DateTime toUTCfromTimestamp(double timestamp) =>
-      DateTime.fromMillisecondsSinceEpoch(timestamp.toInt() * 1000);
+      DateTime.fromMillisecondsSinceEpoch(timestamp.toInt() * 1000).toUtc();
 
   static tz.Location _getTimezoneLocation() {
     final locationKey = tz.timeZoneDatabase.locations.keys.firstWhere(

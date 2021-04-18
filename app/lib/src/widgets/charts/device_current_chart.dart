@@ -1,70 +1,63 @@
 import 'package:app/src/configs/pallete.dart';
 import 'package:app/src/models/charts/chart_bounds.dart';
 import 'package:app/src/models/device.dart';
-import 'package:app/src/models/measurement.dart';
-import 'package:app/src/providers/devices_provider.dart';
 import 'package:app/src/utils/date_converter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class DevicesCurrentChart extends StatelessWidget {
-  const DevicesCurrentChart({Key key}) : super(key: key);
+// ignore: must_be_immutable
+class DeviceCurrentChart extends StatelessWidget {
+  final Device device;
+  final double measurementsBunchMaxAge;
+  final double timeInterval;
+  double _currentInterval = 0;
+  ChartBounds _chartBounds;
+  List<FlSpot> _spots;
+  DeviceCurrentChart(
+      {Key key,
+      @required this.device,
+      @required this.timeInterval,
+      @required this.measurementsBunchMaxAge})
+      : super(key: key) {
+    _generateChartData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final devicesProvider = Provider.of<DevicesProvider>(context);
-    return Column(children: _getCharts(devicesProvider.devices, 120.0));
-    /*Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: _getCharts(devicesProvider.devices, 120.0),
-    );*/
-  }
-
-  _getCharts(List<Device> devices, double interval) {
-    List<Widget> charts = [];
-    try {
-      for (var device in devices) {
-        charts.add(_generateChart(device, interval));
-      }
-    } catch (e) {
-      print('Ha ocurrido un error al generar los graficos');
-    }
-
-    return charts;
-  }
-
-  Widget _generateChart(Device device, double interval) {
-    List<FlSpot> dataSpots = [];
-    double currentInterval = 0;
-    final filteredMeasurements = device.getLasBunchOfTime(interval);
-    for (var measurement in filteredMeasurements) {
-      currentInterval += measurement.current;
-      dataSpots.add(FlSpot(measurement.timestamp, measurement.current));
-    }
-    currentInterval /= filteredMeasurements.length;
-    return Column(children: [
-      SizedBox(
-        height: 10,
-      ),
-      Text(device.name,
-          style: TextStyle(fontSize: 20, color: Pallete.fontColor)),
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-          height: 300,
-          child: LineChart(_getLineChartData(dataSpots, 30.0, currentInterval)),
+    return Container(
+      child: Column(children: [
+        SizedBox(
+          height: 10,
         ),
-      ),
-      SizedBox(
-        height: 20,
-      )
-    ]);
+        Text(device.name,
+            style: TextStyle(fontSize: 20, color: Pallete.fontColor)),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            height: 300,
+            child: LineChart(_getLineChartData()),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        )
+      ]),
+    );
   }
 
-  LineChartData _getLineChartData(
-      List<FlSpot> spots, double xInterval, double yInterval) {
-    final bounds = ChartBounds(spots);
+  void _generateChartData() {
+    final filteredMeasurements =
+        device.getLasBunchOfTime(measurementsBunchMaxAge);
+    _spots = [];
+    for (var measurement in filteredMeasurements) {
+      _currentInterval += measurement.current;
+      _spots.add(FlSpot(measurement.timestamp, measurement.current));
+    }
+    _currentInterval /= filteredMeasurements.length;
+    _chartBounds = ChartBounds(_spots);
+  }
+
+  LineChartData _getLineChartData() {
     List<Color> gradientColors = [
       const Color(0xff23b6e6),
       const Color(0xff02d39a),
@@ -100,7 +93,7 @@ class DevicesCurrentChart extends StatelessWidget {
             },
             margin: 8,
             rotateAngle: 0,
-            interval: xInterval),
+            interval: timeInterval),
         leftTitles: SideTitles(
           showTitles: true,
           getTextStyles: (value) => TextStyle(
@@ -114,21 +107,21 @@ class DevicesCurrentChart extends StatelessWidget {
           },
           reservedSize: 25,
           margin: 5,
-          interval: yInterval,
+          interval: _currentInterval,
         ),
       ),
       borderData: FlBorderData(
           show: true, border: Border.all(color: Pallete.chartLine, width: 1)),
-      minX: bounds.minX,
-      maxX: bounds.maxX,
-      minY: bounds.minY -
-          (bounds.minY *
+      minX: _chartBounds.minX,
+      maxX: _chartBounds.maxX,
+      minY: _chartBounds.minY -
+          (_chartBounds.minY *
               0.1), //Restamos un 10% para que el minimo no quede abajo del todo
-      maxY: bounds.maxY *
+      maxY: _chartBounds.maxY *
           1.1, //Sumamos un 10% para que se vea la linea del maximo
       lineBarsData: [
         LineChartBarData(
-            spots: spots,
+            spots: _spots,
             isCurved: true,
             colors: gradientColors,
             barWidth: 5,

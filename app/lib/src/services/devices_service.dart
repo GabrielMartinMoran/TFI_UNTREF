@@ -10,8 +10,4 @@ class DevicesService extends BaseService {
 
   List<Device> _devicesFromJson(String str) =>
       List<Device>.from(json.decode(str).map((x) => Device.fromJson(x)));
-  /*
-  String devicesToJson(List<Device> data) =>
-      json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-  */
 }

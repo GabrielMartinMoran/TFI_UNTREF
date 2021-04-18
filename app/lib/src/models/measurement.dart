@@ -20,13 +20,6 @@ class Measurement {
         voltage: json["voltage"].toDouble(),
       );
 
-  Map<String, dynamic> toJson() => {
-        "current": current,
-        "power": power,
-        "timestamp": timestamp,
-        "voltage": voltage,
-      };
-
   DateTime get utcDatetime {
     return DateConverter.toUTCfromTimestamp(timestamp);
   }

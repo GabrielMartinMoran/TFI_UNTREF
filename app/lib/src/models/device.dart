@@ -18,12 +18,6 @@ class Device {
         name: json["name"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "bleId": bleId,
-        "measurements": List<dynamic>.from(measurements.map((x) => x.toJson())),
-        "name": name,
-      };
-
   List<Measurement> getLasBunchOfTime(double lastSeconds) {
     final filtered = measurements
         .where((x) =>
