@@ -13,10 +13,10 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Gestión de dispositivos'),
-          backgroundColor: Pallete.gray,
+          backgroundColor: Pallete.container,
         ),
         body: child,
-        backgroundColor: Pallete.backgroundColor,
+        backgroundColor: Pallete.background,
         drawer: AppMenu(navigateTo: navigateTo));
   }
 }

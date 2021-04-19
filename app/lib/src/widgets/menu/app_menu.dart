@@ -2,6 +2,7 @@ import 'package:app/src/configs/pallete.dart';
 import 'package:app/src/providers/router_provider.dart';
 import 'package:app/src/widgets/menu/menu_item.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 class AppMenu extends StatefulWidget {
@@ -23,7 +24,7 @@ class _AppMenuState extends State<AppMenu> {
     return SafeArea(
       child: Drawer(
         child: Container(
-          color: Pallete.gray,
+          color: Pallete.container,
           child: Column(
             children: [
               SizedBox(
@@ -39,7 +40,7 @@ class _AppMenuState extends State<AppMenu> {
                   }),
               MenuItem(
                   text: 'Mis dispositivos',
-                  icon: Icons.bluetooth,
+                  icon: MdiIcons.monitorMultiple,
                   onTap: () {
                     //return Navigator.of(context).pushNamed('/devices');
                     return routerProvider.navigateTo('/devices');

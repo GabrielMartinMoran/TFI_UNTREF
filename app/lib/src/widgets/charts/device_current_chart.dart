@@ -58,10 +58,6 @@ class DeviceCurrentChart extends StatelessWidget {
   }
 
   LineChartData _getLineChartData() {
-    List<Color> gradientColors = [
-      const Color(0xff23b6e6),
-      const Color(0xff02d39a),
-    ];
     return LineChartData(
       gridData: FlGridData(
           show: true,
@@ -123,7 +119,7 @@ class DeviceCurrentChart extends StatelessWidget {
         LineChartBarData(
             spots: _spots,
             isCurved: true,
-            colors: gradientColors,
+            colors: Pallete.powerGradient,
             barWidth: 5,
             isStrokeCapRound: true,
             dotData: FlDotData(
@@ -131,7 +127,7 @@ class DeviceCurrentChart extends StatelessWidget {
             ),
             belowBarData: BarAreaData(
               show: true,
-              colors: gradientColors
+              colors: Pallete.powerGradient
                   .map((color) => color.withOpacity(0.3))
                   .toList(),
             ),

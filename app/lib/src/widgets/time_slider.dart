@@ -1,3 +1,4 @@
+import 'package:app/src/configs/pallete.dart';
 import 'package:flutter/material.dart';
 
 class TimeSlider extends StatefulWidget {
@@ -24,6 +25,8 @@ class _TimeSliderState extends State<TimeSlider> {
   @override
   Widget build(BuildContext context) {
     return Slider(
+      activeColor: Pallete.primary,
+      inactiveColor: Pallete.primary.withOpacity(0.3),
       value: sliderValue,
       onChanged: (double value) {
         setState(() {
