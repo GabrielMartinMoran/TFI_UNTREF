@@ -21,7 +21,7 @@ class Device {
   List<Measurement> getLasBunchOfTime(double lastSeconds) {
     final filtered = measurements
         .where((x) =>
-            DateTime.now().difference(x.utcDatetime).inSeconds <= lastSeconds)
+            DateTime.now().difference(x.datetime).inSeconds <= lastSeconds)
         .toList();
     return filtered;
   }

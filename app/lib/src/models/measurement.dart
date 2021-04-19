@@ -20,7 +20,7 @@ class Measurement {
         voltage: json["voltage"].toDouble(),
       );
 
-  DateTime get utcDatetime {
-    return DateConverter.toUTCfromTimestamp(timestamp);
+  DateTime get datetime {
+    return DateConverter.fromTimestamp(timestamp);
   }
 }
