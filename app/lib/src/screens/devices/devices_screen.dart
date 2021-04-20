@@ -17,7 +17,7 @@ class DevicesScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Pallete.background,
         body: ListView(
-          children: getDevicesListItems(devicesProvider.devices),
+          children: _body(devicesProvider),
         ),
         floatingActionButton: FloatingActionButton(
             backgroundColor: Pallete.primary,
@@ -25,6 +25,12 @@ class DevicesScreen extends StatelessWidget {
             tooltip: 'Agregar dispositivo',
             onPressed: () => routerProvider.navigateTo('/devices/add'),
             child: Icon(MdiIcons.plus)));
+  }
+
+  List<Widget> _body(DevicesProvider devicesProvider) {
+    final List<Widget> children = [SizedBox(height: 5.0)];
+    children.addAll(getDevicesListItems(devicesProvider.devices));
+    return children;
   }
 
   List<DeviceListItem> getDevicesListItems(List<Device> devices) {

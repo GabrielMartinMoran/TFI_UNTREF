@@ -5,12 +5,14 @@ class Device {
   List<Measurement> measurements;
   String name;
   bool active;
+  bool turnedOn;
 
   Device({
     this.bleId,
     this.measurements,
     this.name,
     this.active,
+    this.turnedOn,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) => Device(
@@ -19,6 +21,7 @@ class Device {
             json["measurements"].map((x) => Measurement.fromJson(x))),
         name: json["name"],
         active: json["active"],
+        turnedOn: json["turnedOn"],
       );
 
   List<Measurement> getLasBunchOfTime(double lastSeconds) {

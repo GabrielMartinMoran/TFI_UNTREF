@@ -1,4 +1,4 @@
-import 'package:app/src/configs/pallete.dart';
+/*import 'package:app/src/configs/pallete.dart';
 import 'package:app/src/models/device.dart';
 import 'package:app/src/providers/devices_provider.dart';
 import 'package:app/src/widgets/charts/device_current_chart.dart';
@@ -42,9 +42,11 @@ class _DevicesCurrentChartsState extends State<DevicesCurrentCharts> {
     try {
       for (var device in devices) {
         charts.add(DeviceCurrentChart(
-            device: device,
-            timeInterval: timeInterval,
-            measurementsBunchMaxAge: measurementsMaxAge));
+          device: device,
+          timeInterval: timeInterval,
+          measurementsBunchMaxAge: measurementsMaxAge,
+          title: device.name,
+        ));
       }
     } catch (e) {
       print('Ha ocurrido un error al generar los graficos');
@@ -52,3 +54,4 @@ class _DevicesCurrentChartsState extends State<DevicesCurrentCharts> {
     return charts;
   }
 }
+*/

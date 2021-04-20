@@ -7,6 +7,8 @@ class Pallete {
   static final Color container = new Color(0xFF1C2754);
   static final Color background = new Color(0xFF141D3B);
   static final Color fontColor = new Color(0xFFFFFFFF);
+  static final Color turnedOn = new Color(0xFFe9c46a);
+
   static final Color ok = new Color(0xFF90be6d);
   static final Color danger = new Color(0xFFf94144);
   // Charts

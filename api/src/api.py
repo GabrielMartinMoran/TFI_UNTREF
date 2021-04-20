@@ -17,10 +17,10 @@ APP_PORT = 5000
 REF_VOLTAGE = 220
 
 data = [
-    Device('Heladera', 'b3240d32-9ee9-11eb-a8b3-0242ac130003', active=True),
-    Device('Lavarropas', 'bbe4137c-9ee9-11eb-a8b3-0242ac130003', active=True),
-    Device('Cafetera', 'c331ee60-9ee9-11eb-a8b3-0242ac130003', active=False),
-    Device('Computadora', 'c80fbd68-9ee9-11eb-a8b3-0242ac130003', active=True),
+    Device('Heladera', 'b3240d32-9ee9-11eb-a8b3-0242ac130003', active=True, turned_on=True),
+    Device('Lavarropas', 'bbe4137c-9ee9-11eb-a8b3-0242ac130003', active=True, turned_on=True),
+    Device('Cafetera', 'c331ee60-9ee9-11eb-a8b3-0242ac130003', active=False, turned_on=True),
+    Device('Computadora', 'c80fbd68-9ee9-11eb-a8b3-0242ac130003', active=True, turned_on=False),
 ]
 
 def data_generating_thread():

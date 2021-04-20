@@ -65,9 +65,11 @@ class AppRouterDelegate extends RouterDelegate<RouteState>
         addRouteIfRequired(routed, pages, route, Routes.routes[route]);
       }
     } on TypeError catch (e) {
+      print(e);
       addErrorPage(pages,
           'Ha ocurrido un error al tratar de procesar los parametros de la página');
     } catch (e) {
+      print(e);
       addErrorPage(pages, e.toString());
     }
 
@@ -79,7 +81,7 @@ class AppRouterDelegate extends RouterDelegate<RouteState>
   void addRouteIfRequired(RouteResult routeResult, List<MaterialPage> pages,
       String path, Function screenGenerator) {
     if (!routeResult.shouldRender(path)) return;
-    StatelessWidget screen;
+    Widget screen;
     if (!routeResult.isSameRoute(path) || routeResult.paramsCount(path) == 0) {
       screen = screenGenerator();
     } else {

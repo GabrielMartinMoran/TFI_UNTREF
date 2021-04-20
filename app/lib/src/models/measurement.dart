@@ -23,4 +23,9 @@ class Measurement {
   DateTime get datetime {
     return DateConverter.fromTimestamp(timestamp);
   }
+
+  Measurement clone() {
+    return new Measurement(
+        current: current, power: power, timestamp: timestamp, voltage: voltage);
+  }
 }

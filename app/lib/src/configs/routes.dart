@@ -21,8 +21,8 @@ class Routes {
   static final Map routes = {
     '/devices': () => DevicesScreen(),
     '/devices/add': () => AddDeviceScreen(),
-    '/devices/view/<int>': (List<dynamic> args) =>
-        ViewDeviceScreen(deviceId: args[0]),
+    '/devices/view/<string>': (List<dynamic> args) =>
+        ViewDeviceScreen(deviceBleId: args[0]),
   };
 
   static String routeOf(Widget widgetName) {
