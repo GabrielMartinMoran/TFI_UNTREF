@@ -1,0 +1,11 @@
+{
+    "python.pythonPath": "env\\Scripts\\python.exe",
+    "python.venvPath": "env",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint_protobuf"
+    ]
+}
