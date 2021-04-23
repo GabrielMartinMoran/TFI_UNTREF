@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.serving import WSGIRequestHandler
 
 from models.device import Device
-from models.measurement import Measurement
+from models.measure import Measure
 
 app = Flask(__name__)
 CORS(app)
@@ -28,8 +28,8 @@ def data_generating_thread():
     loop = True
     while(loop):
         for device in data:
-            device.add_measurement(
-                Measurement(
+            device.add_measure(
+                Measure(
                     REF_VOLTAGE + random.uniform(-10, 10),
                     random.uniform(0, 1),
                     int(datetime.now().timestamp())# * 1000)

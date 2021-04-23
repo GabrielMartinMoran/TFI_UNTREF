@@ -8,7 +8,7 @@
             "name": "Python: Run project",
             "type": "python",
             "request": "launch",
-            "program": "src/api.py",
+            "program": "run.py",
             "console": "integratedTerminal"
         }
     ]

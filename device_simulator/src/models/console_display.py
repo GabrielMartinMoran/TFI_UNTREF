@@ -1,21 +1,18 @@
 from copy import deepcopy
-import sys
-import os
+from src.utils.console_clearer import clear_console
 import config
+import datetime
 
-
-class ConsoleDisplay():
-
-    END_COLOR = '\033[0m'
+class ConsoleDisplay():    
 
     COLORS_REPLACEMENT = {
-        '{purple}': END_COLOR + '\033[35m',
-        '{white}': END_COLOR +'\033[37m',
-        '{red}': END_COLOR + '\033[91m',
-        '{green}': END_COLOR + '\033[92m',
-        '{yellow}': END_COLOR + '\033[93m',
-        '{blue}': END_COLOR + '\033[94m',
-        '{cyan}': END_COLOR + '\033[96m',
+        '{magenta}': config.COLORS.END_COLOR + config.COLORS.MAGENTA,
+        '{white}': config.COLORS.END_COLOR + config.COLORS.WHITE,
+        '{red}': config.COLORS.END_COLOR + config.COLORS.RED,
+        '{green}': config.COLORS.END_COLOR + config.COLORS.GREEN,
+        '{yellow}': config.COLORS.END_COLOR + config.COLORS.YELLOW,
+        '{blue}': config.COLORS.END_COLOR + config.COLORS.BLUE,
+        '{cyan}': config.COLORS.END_COLOR + config.COLORS.CYAN,
     }
 
     def __init__(self):
@@ -31,23 +28,24 @@ class ConsoleDisplay():
         for key in self.COLORS_REPLACEMENT:
             self.ui = self.ui.replace(key, self.COLORS_REPLACEMENT[key])
 
-    def __map_properties(self, device):
-        self.ui = self.ui.replace('{current}', str(device.measurements[-1].current))
-        self.ui = self.ui.replace('{voltage}', str(device.measurements[-1].voltage))
-        self.ui = self.ui.replace('{power}', str(device.measurements[-1].power))
-        self.ui = self.ui.replace('{time}', str(device.measurements[-1].timestamp))
+    def __map_properties(self, device, user, out_message):
+        self.ui = self.ui.replace('{current}', str(device.last_measure.current))
+        self.ui = self.ui.replace('{voltage}', str(device.last_measure.voltage))
+        self.ui = self.ui.replace('{power}', str(device.last_measure.power))
+        self.ui = self.ui.replace('{time}', str(datetime.datetime.fromtimestamp(device.last_measure.timestamp)))
+        self.ui = self.ui.replace('{name}', str(device.name))
+        self.ui = self.ui.replace('{ble_id}', str(device.ble_id))
+        self.ui = self.ui.replace('{username}', str(user.username))
+        self.ui = self.ui.replace('{email}', str(user.email))
+        self.ui = self.ui.replace('{user_id}', str(user.id))
+        self.ui = self.ui.replace('{output_message}', out_message)
 
-    def set_ui(self, device):
+    def set_ui(self, device, user, out_message):
         self.ui = deepcopy(self.default_ui)
-        #self.ui = self.ui.replace('{iterator_value}', str(iterator_value))
         self.__replace_colors()
-        self.__map_properties(device)
-        self.ui += self.END_COLOR
+        self.__map_properties(device, user, out_message)
+        self.ui += config.COLORS.END_COLOR
 
     def draw(self):
-        #cmd_print_command = self.ui.replace('\n',' && echo ')
-        os.system('cls')
+        clear_console()
         print(self.ui, end='')
-        #sys.stdout.write(self.ui)
-        #sys.stdout.flush()
-        #print(self.ui, end=self.END_COLOR)
