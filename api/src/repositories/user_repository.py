@@ -25,9 +25,8 @@ class UserRepository(BaseRepository):
             return User.from_json(user)
         return None
 
-    def get_by_id(self, user_id, get_avatar=False):
-        model = User.from_json(
-            self.collection.find_one({'_id': ObjectId(user_id)}))
+    def get_by_id(self, user_id: str, get_avatar=False):
+        model = User.from_json(self.collection.find_one({'_id': ObjectId(user_id)}))
         if get_avatar:
             model.avatar = self.get_user_avatar(model.email)
         return model
@@ -37,7 +36,7 @@ class UserRepository(BaseRepository):
             hashlib.md5(email.lower().encode('utf-8')).hexdigest()))
         return ImageEncoder.to_base_64_str(response.content)
 
-    def insert(self, model):
+    def insert(self, model: User):
         entity = model.to_json(
             include_hashed_password=True, creating_user=True)
         del entity['id']

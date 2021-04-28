@@ -1,5 +1,4 @@
 import datetime
-from utils.text_formatters import snake_to_lower_camel
 
 
 class BaseModel:

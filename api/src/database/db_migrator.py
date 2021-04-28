@@ -2,9 +2,9 @@ import sys
 import os
 import datetime
 from pymongo import MongoClient
-from utils import console_colors
-import config
-from database.migrations.migration_001 import Migration001
+from src.utils import console_colors
+from src import config
+from src.database.migrations.migration_001 import Migration001
 
 
 class DBMigrator:

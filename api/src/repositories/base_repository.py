@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from src.utils import global_variables
 import src.config as config
-import datetime
 
 class BaseRepository:
 
@@ -15,9 +14,3 @@ class BaseRepository:
 
     def get_collection(self):
         return self.data_base[self.COLLECTION_NAME]
-
-    def insert(self, model):
-        entity = model.to_json()
-        if 'id' in entity:
-            del(entity['id'])
-        return str(self.collection.insert_one(entity).inserted_id)

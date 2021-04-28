@@ -4,5 +4,8 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"pythonTestExplorer.testFramework": "pytest",
+		"python.coverageView.highlightMode": "covered"
+	}
 }
