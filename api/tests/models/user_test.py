@@ -43,6 +43,10 @@ def test_is_valid_returns_false_when_email_is_null(user):
     user.email = None
     assert not user.is_valid()
 
+def test_is_valid_returns_false_when_password_is_invalid(user):
+    user.password = 'invalidpassword'
+    assert not user.is_valid()
+
 def test_is_valid_returns_false_when_email_is_invalid(user):
     user.email = 'invalidemail@invalid'
     assert not user.is_valid()

@@ -7,7 +7,6 @@ CONNECT = 'CONNECT'
 OPTIONS = 'OPTIONS'
 TRACE = 'TRACE'
 PATCH = 'PATCH'
-OPTIONS = 'OPTIONS'
 
 
 def get_methods_list():

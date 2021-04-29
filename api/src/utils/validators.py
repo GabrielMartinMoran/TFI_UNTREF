@@ -29,7 +29,11 @@ def not_null(data):
     return data is not None
 
 def greater_than(data, min_value=0):
+    if data is None:
+        return False
     return data > min_value
 
 def value_in(data, possible_values):
+    if data is None:
+        return False
     return data in possible_values

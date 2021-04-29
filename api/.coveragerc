@@ -10,6 +10,8 @@ omit=
     */migrations/*
     */config.py
     */api.py
+    */logo_printer.py
+    */console_colors.py
     run.py
     .coverage
     .coveragerc
@@ -17,4 +19,4 @@ omit=
 
 [report]
 show_missing=True
-fail_under=10
+fail_under=0

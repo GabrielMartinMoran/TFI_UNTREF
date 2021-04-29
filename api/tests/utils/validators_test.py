@@ -1,5 +1,3 @@
-import pytest
-import sys
 from src.utils.validators import *
 
 TEXT_REGEX = '[A-Z]+'
@@ -29,16 +27,25 @@ def test_min_length_returns_false_if_data_is_none():
     assert not min_length(None, 4)
 
 def test_max_length_returns_true_if_data_len_is_equal_to_max():
-    assert min_length('ASD', 3)
+    assert max_length('ASD', 3)
 
 def test_max_length_returns_true_if_data_len_is_lower_than_max():
-    assert min_length('ASD', 2)
+    assert max_length('ASD', 4)
 
 def test_max_length_returns_false_if_data_len_is_greater_than_max():
-    assert not min_length('ASD', 4)
+    assert not max_length('ASD', 2)
 
 def test_max_length_returns_false_if_data_is_none():
-    assert not min_length(None, 4)
+    assert not max_length(None, 4)
+
+def test_length_returns_false_if_data_is_none():
+    assert not length(None, 5)
+
+def test_length_returns_false_if_data_length_does_not_matches():
+    assert not length("ASD", 4)
+
+def test_length_returns_true_if_data_length_matches():
+    assert length("ASD", 3)
 
 def test_length_between_returns_false_if_data_is_none():
     assert not length_between(None, 0, 100)
@@ -63,3 +70,24 @@ def test_not_null_returns_true_if_data_is_not_none():
 
 def test_not_null_returns_false_if_data_is_none():
     assert not not_null(None)
+
+def test_greater_than_returns_true_when_data_ig_greater_than_min_value():
+    assert greater_than(5, 2)
+
+def test_greater_than_returns_false_when_data_if_less_than_min_value():
+    assert not greater_than(2, 5)
+
+def test_greater_than_returns_false_when_data_if_equal_than_min_value():
+    assert not greater_than(5, 5)
+
+def test_greater_than_returns_false_when_data_is_none():
+    assert not greater_than(None, 2)
+
+def test_value_in_returns_true_when_data_is_in_possible_values():
+    assert value_in(1, [1,2,3,4,5])
+
+def test_value_in_returns_false_when_data_is_not_in_possible_values():
+    assert not value_in(1, [2,3,4,5])
+
+def test_value_in_returns_false_when_data_is_none():
+    assert not value_in(None, [])

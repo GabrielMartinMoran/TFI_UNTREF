@@ -1,4 +1,4 @@
-from utils import console_colors
+from src.utils import console_colors
 
 
 class LogoPrinter:
