@@ -1,3 +1,4 @@
+from src.utils.json_utils import get_json_prop
 import datetime
 
 
@@ -17,13 +18,14 @@ class BaseModel:
         raise NotImplementedError()
 
     def validate(self):
-        # Pasa por un set para que no haya duplicados
-        self.validation_errors = list({
-            x.attribute
-            for x in self.MODEL_VALIDATORS
-            if not x.validation_function(getattr(self, x.attribute), *x.args)
-        })
+        self.validation_errors = []
+        for validator in self.MODEL_VALIDATORS:
+            if not validator.is_valid(self):
+                self.validation_errors.append(validator.get_failed_message())
 
     @staticmethod
     def from_json(json):
-        return BaseModel()
+        model = BaseModel()
+        if 'createdDate' in json:
+            model.created_date = get_json_prop(json, 'createdDate')
+        return model

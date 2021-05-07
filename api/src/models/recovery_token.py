@@ -1,6 +1,4 @@
 from datetime import datetime
-import src.utils.validators as validators
-import src.utils.validation_patterns as validation_patterns
 from src.models.base_model import BaseModel
 from src.utils.json_utils import get_json_prop
 from src.utils.hashing import hash_password

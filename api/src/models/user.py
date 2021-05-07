@@ -1,6 +1,5 @@
-from src.utils.validator import Validator
-import src.utils.validators as validators
-import src.utils.validation_patterns as validation_patterns
+from src.utils.validators.string_validator import StringValidator
+from src.utils import validation_patterns
 from src.models.base_model import BaseModel
 from src.utils.json_utils import get_json_prop
 from src.utils.hashing import hash_password
@@ -11,10 +10,10 @@ class User(BaseModel):
     MAX_USER_LENGTH = 32
 
     MODEL_VALIDATORS = [
-        Validator('username', validators.length_between, MIN_USER_LENGTH, MAX_USER_LENGTH),
-        Validator('email', validators.regex,
-                  validation_patterns.EMAIL_VALIDATION_PATTERN),
-        Validator('hashed_password', validators.not_null),
+        StringValidator('username', min_len=MIN_USER_LENGTH, max_len=MAX_USER_LENGTH),
+        StringValidator('email', regex=validation_patterns.EMAIL_VALIDATION_PATTERN),
+        StringValidator('password', nullable=True, regex=validation_patterns.PASSWORD_VALIDATION_PATTERN),
+        StringValidator('hashed_password', message='password is not valid'),
     ]
 
     def __init__(self):
@@ -57,9 +56,3 @@ class User(BaseModel):
 
     def password_matches(self, non_hashed_password) -> bool:
         return self.hashed_password == hash_password(non_hashed_password)
-
-    def validate(self):
-        super().validate()
-        # Agregamos aca la validacion de password porque solamente esta en plano al crear un usuario
-        if self.password and not validators.regex(self.password, validation_patterns.PASSWORD_VALIDATION_PATTERN):
-            self.validation_errors.append('password')

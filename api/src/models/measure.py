@@ -1,14 +1,14 @@
-from src.utils.validator import Validator
-import src.utils.validators as validators
+from src.utils.validators.int_validator import IntValidator
+from src.utils.validators.float_validator import FloatValidator
 from src.models.base_model import BaseModel
 from src.utils.json_utils import get_json_prop
 
 class Measure(BaseModel):
 
     MODEL_VALIDATORS = [
-        Validator('timestamp', validators.not_null),
-        Validator('voltage', validators.not_null),
-        Validator('current', validators.not_null),
+        IntValidator('timestamp', min=0),
+        FloatValidator('voltage', min=0),
+        FloatValidator('current', min=0),
     ]
 
     def __init__(self):

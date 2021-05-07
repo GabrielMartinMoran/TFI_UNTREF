@@ -9,8 +9,6 @@ def user():
     user.email = 'test@test.com'
     user.username = 'username'
     user.hashed_password = hash_password('Passw0rd')
-    user.preferred_language = 'ES'
-    user.preferred_currency  = 'ARS'
     return user
 
 @pytest.fixture
@@ -20,9 +18,6 @@ def user_json():
         'username': 'username',
         'email': 'test@test.com',
         'avatar': 'image_avatar',
-        'bio': 'bio',
-        'verified': True,
-        'verificationToken': 'token',
         'createdDate': 'date',
         'password': 'Password',
     }
