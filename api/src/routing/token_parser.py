@@ -1,29 +1,41 @@
 import jwt
 from src import config
 
+
 class TokenParser:
 
-    def __init__(self, request):
-        self.request = request
-        self.parse_token()
+    TOKEN_TYPE = 'Bearer'
+    AUTH_HEADER = 'Authorization'
 
-    def parse_token(self):
+    def __init__(self, request) -> None:
+        self.request = request
+        self.token = None
+        self.__parse_token()
+
+    def __parse_token(self) -> None:
         try:
-            token = self.request.headers['Authorization']
-            token_type = 'Bearer'
-            if token_type in token:
-                token = token[len(token_type)+1:]
-            data = jwt.decode(token, config.APP_SECRET,
-                              algorithms=[config.HASH_ALGORITHM])
-            #if self.request.headers['User-Agent'] == data['user_agent']:
+            token = self.__get_token_from_header()
+            if not token or not self.TOKEN_TYPE in token:
+                return
+            token = self.__remove_token_type(token)
+            data = self.__decode_token(token)
             self.token = data
             return
-        except Exception as ex:            
-            self.token = None
+        except Exception as ex:
             return
 
-    def valid_token(self):
+    def __get_token_from_header(self) -> str:
+        return self.request.headers[self.AUTH_HEADER]
+
+    def __remove_token_type(self, str_token: str) -> str:
+        # +1 por el espacio que sigue luego del tipo
+        return str_token[len(self.TOKEN_TYPE)+1:]
+
+    def __decode_token(self, str_token: str) -> str:
+        return jwt.decode(str_token, config.APP_SECRET, algorithms=[config.HASH_ALGORITHM])
+
+    def valid_token(self) -> bool:
         return self.token is not None
 
-    def get_token(self):
+    def get_token(self) -> dict:
         return self.token

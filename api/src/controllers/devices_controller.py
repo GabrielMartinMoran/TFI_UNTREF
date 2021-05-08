@@ -2,7 +2,7 @@ from src.models.measure import Measure
 from src.utils.logger import Logger
 from src.controllers.base_controller import BaseController, http_method
 import src.utils.http_methods as http_methods
-from src.utils.ble_id_generator import generate_ble_id
+from src.utils.ble_id_generator import BLEIdGenerator
 from src.models.device import Device
 from src.repositories.device_repository import DeviceRepository
 
@@ -14,7 +14,7 @@ class DevicesController(BaseController):
 
     @http_method(http_methods.GET)
     def generate_ble_id(self) -> dict:
-        return self.ok_success({ 'bleId' : generate_ble_id() })
+        return self.ok_success({ 'bleId' : BLEIdGenerator.generate_ble_id() })
 
     @http_method(http_methods.POST, auth_required=True)
     def create(self) -> dict:

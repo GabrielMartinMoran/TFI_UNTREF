@@ -26,6 +26,7 @@ def device_json():
         'bleId': 'e348ae42-ebb0-4453-a12f-c05bdadd1479',
         'active': True,
         'turnedOn': True,
+        'createdDate': 'date',
         'measures': [{
             'timestamp': 10000,
             'voltage': 220.0,
@@ -63,6 +64,7 @@ def test_from_json_returns_device_when_json_is_provided(device_json):
     assert actual.ble_id == device_json['bleId']
     assert actual.active == device_json['active']
     assert actual.turned_on == device_json['turnedOn']
+    assert actual.created_date == device_json['createdDate']
     assert actual.measures[0].timestamp == device_json['measures'][0]['timestamp']
     assert actual.measures[0].voltage == device_json['measures'][0]['voltage']
     assert actual.measures[0].current == device_json['measures'][0]['current']
