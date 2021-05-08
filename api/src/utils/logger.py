@@ -45,4 +45,3 @@ class Logger:
         if not os.path.exists(path):
             f =  open(path, 'w')
             f.close()
-        

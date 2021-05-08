@@ -1,3 +1,4 @@
+from src.routing.router import Router
 from typing import Optional
 from flask import jsonify
 from src.utils import global_variables
@@ -11,9 +12,7 @@ def normalize_alias(alias: str) -> Optional[str]:
 
 def http_method(method_type: str, alias: str = None, auth_required: bool = False):
     def wrapper(func):
-        # Por si estamos testeando
-        if global_variables.ROUTER_INSTANCE:
-            global_variables.ROUTER_INSTANCE.register_http_method({
+        Router.register_http_method({
                 'type': method_type,
                 'alias': normalize_alias(alias),
                 'class_name': func.__qualname__.split('.')[0],

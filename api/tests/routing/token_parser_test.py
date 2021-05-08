@@ -26,6 +26,10 @@ def test_init_cant_parse_token_if_it_is_not_bearer():
     parser = TokenParser(MockedRequest(jwt.encode(token_data, config.APP_SECRET, algorithm=config.HASH_ALGORITHM)))
     assert parser.token is None
 
+def test_init_cant_parse_token_if_encoded_token_is_not_valid():
+    parser = TokenParser(MockedRequest('Bearer invalid_encoded_token'))
+    assert parser.token is None
+
 def test_init_cant_parse_token_if_auth_header_not_exists():
     request = MockedRequest(None)
     parser = TokenParser(request)
@@ -46,5 +50,5 @@ def test_valid_token_returns_false_when_token_is_none():
 
 def test_get_token_returns_token_attribute_when_called():
     parser = TokenParser(MockedRequest(create_token(token_data)))
-    assert token_data == parser.token
+    assert token_data == parser.get_token()
 
