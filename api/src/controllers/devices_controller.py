@@ -13,7 +13,7 @@ class DevicesController(BaseController):
         self.device_repository = DeviceRepository()
 
     @http_method(http_methods.GET)
-    def generate_ble_id(self) -> dict:
+    def generate_ble_id(self, test_param) -> dict:
         return self.ok_success({ 'bleId' : BLEIdGenerator.generate_ble_id() })
 
     @http_method(http_methods.POST, auth_required=True)

@@ -53,6 +53,7 @@ def on_app_stopped():
 atexit.register(on_app_stopped)
 
 def on_starting(server):
+    router.print_routemaps()
     LogoPrinter.print_logo()
     DBMigrator().run_migrations()
     Logger.get_logger(__file__).info("App started")

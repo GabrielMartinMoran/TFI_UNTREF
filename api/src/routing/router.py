@@ -24,15 +24,14 @@ ERROR_TEMPLATE = 'error.html'
 
 class Router:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.routes: List[ControllerRoute] = []
         self.http_methods = []
         self.__register_instance()
         self.__map_routes()
-        self.__print_routemaps()
 
     @staticmethod
-    def get_base_url():
+    def get_base_url() -> str:
         return BASE_API_URL
 
     @staticmethod
@@ -40,17 +39,13 @@ class Router:
         return make_response({'message': message}, code)
 
     @staticmethod
-    def register_http_method(http_method):
+    def register_http_method(http_method) -> None:
         if global_variables.ROUTER_INSTANCE:
             global_variables.ROUTER_INSTANCE.http_methods.append(http_method)
 
     def route(self, request, path):
-        splitted_path = path.split('/')
-        controller_name = None
-        try:
-            controller_name = splitted_path[0]
-        except IndexError:
-            return self.error_response('Not found', 404)
+        splitted_path = path.split('/') # Aunque sea un string vacio, el primer elemento siempre existe
+        controller_name = splitted_path[0]
         method_name = F'/{splitted_path[1]}' if len(splitted_path) > 1 else '/'
 
         # CORS
@@ -59,7 +54,7 @@ class Router:
             wanted_method = self.__get_routed_method(controller_name, method_name, cors_solver.get_wanted_http_metod())
             if wanted_method is None:
                 return self.error_response('Not found', 404)
-            return cors_solver.get_cors_response(wanted_method)
+            return cors_solver.get_cors_response()
 
         routed_method = self.__get_routed_method(controller_name, method_name, request.method)
         if routed_method is None:
@@ -68,24 +63,31 @@ class Router:
         # Si requiere token
         token_parser = TokenParser(request)
         if routed_method.auth_required and not token_parser.valid_token():
-            return self.error_response('Invalid token', 403)
+            return self.error_response('Unauthorized', 401)
 
         params = []
         if len(splitted_path) > 2:
             params = splitted_path[2:]
         try:
             return self.__call_controller_method(routed_method, request, token_parser.get_token(), *params)
-        except pymongo.errors.ServerSelectionTimeoutError as ex:
-            Logger.get_logger(__file__).warning(
-                "route - Could not connect to MongoDB database")
-            print(F'{console_colors.ERROR}Could not connect to MongoDB'
-                  F' database: {ex}{console_colors.ENDC}')
-            return self.error_response('Internal server error', 500)
-        except AttributeError as ex:
+        except TypeError as ex:
             print(
                 F'{console_colors.ERROR}An error has ocurred with message:'
                 F' {ex}{console_colors.ENDC}')
-            return self.error_response('Bad method arguments', 500)
+            return self.error_response('Bad method arguments', 400)
+        except Exception as ex:
+            print(F'{console_colors.ERROR}{ex}{console_colors.ENDC}')
+            return self.error_response('Internal server error', 500)
+
+    def print_routemaps(self): # pragma: no cover
+        print(console_colors.HEADER + console_colors.UNDERLINE + '\nMapa de controllers utilizados:' + console_colors.ENDC)
+        for route in self.routes:
+            print(F'  • {console_colors.WARNING}{route.controller_name()}{console_colors.ENDC} -> '
+                  F'{console_colors.OK}/{self.get_base_url()}/{route.route()}{console_colors.ENDC}')
+            for method in route.methods:
+                print(F'\t‣ {console_colors.CYAN}{method.http_type} {console_colors.ENDC}'
+                      F'- {console_colors.WARNING}{method.get_path()}{console_colors.ENDC}')
+            print('\n')
 
     def __register_instance(self):
         global_variables.ROUTER_INSTANCE = self
@@ -129,19 +131,7 @@ class Router:
         return None
 
     def __discover_controllers(self):
-        return list(
-            filter(None.__ne__,
-                   map(self.__get_controller_class, self.__discover_controllers_modules())))
-
-    def __print_routemaps(self):
-        print(console_colors.HEADER + console_colors.UNDERLINE + '\nMapa de controllers utilizados:' + console_colors.ENDC)
-        for route in self.routes:
-            print(F'  • {console_colors.WARNING}{route.controller_name()}{console_colors.ENDC} -> '
-                  F'{console_colors.OK}/{self.get_base_url()}/{route.route()}{console_colors.ENDC}')
-            for method in route.methods:
-                print(F'\t‣ {console_colors.CYAN}{method.http_type} {console_colors.ENDC}'
-                      F'- {console_colors.WARNING}{method.get_path()}{console_colors.ENDC}')
-            print('\n')
+        return list(filter(None.__ne__,map(self.__get_controller_class, self.__discover_controllers_modules())))
 
     def __get_routed_method(self, controller, method, http_type) -> bool:
         for cont_route in self.routes:
