@@ -20,15 +20,17 @@ CLIENT_APP_FOLDER = './client'
 # -     APP INFO      - #
 # --------------------- #
 APP_INFO_COLLECTION = 'app'
-LAST_MIGRATION_APP_INFO_KEY = 'lastMigration'
-LAST_MIGRATION_APP_INFO_DATE = 'lastMigrationDate'
+LAST_MIGRATION_APP_INFO_KEY = 'last_migration'
+LAST_MIGRATION_APP_INFO_DATE = 'last_migration_date'
 
 # --------------------- #
 # -      DATABASE     - #
 # --------------------- #
 DB_URL = os.environ.get('DB_URL', 'localhost')
-DB_PORT = os.environ.get('DB_PORT', 27017)
-DB_NAME = 'devices_management'
+DB_PORT = os.environ.get('DB_PORT', 5432)
+DB_NAME = os.environ.get('DB_NAME', 'devices_management_dev')
+DB_USERNAME = os.environ.get('DB_USERNAME', None)
+DB_PASSWORD = os.environ.get('DB_PASSWORD', None)
 
 # --------------------- #
 # -        JWT        - #

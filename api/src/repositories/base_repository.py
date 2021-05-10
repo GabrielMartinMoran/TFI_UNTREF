@@ -1,16 +1,30 @@
-from pymongo import MongoClient
-from src.utils import global_variables
 import src.config as config
+import psycopg2
+from src.utils.query_result import QueryResult
 
 class BaseRepository:
 
-    COLLECTION_NAME = None
+    def _execute_query(self, query: str, transaction=None) -> QueryResult:
+        conn = transaction
+        if not conn:
+            conn = self._create_transaction()
+        cursor = conn.cursor()
+        result = QueryResult()
+        try:
+            cursor.execute(query)
+            result.from_cursor(cursor)
+            cursor.close()
+            if not transaction:
+                conn.commit()
+        except Exception as e:
+            if not transaction:
+                conn.rollback()
+            raise Exception(e)
+        finally:
+            if not transaction:
+                conn.close()
+        return result
 
-    def __init__(self):
-        if not global_variables.MONGO_CLIENT_INSTANCE:
-            global_variables.MONGO_CLIENT_INSTANCE = MongoClient(config.DB_URL, int(config.DB_PORT))
-        self.data_base = global_variables.MONGO_CLIENT_INSTANCE[config.DB_NAME]
-        self.collection = self.get_collection()
-
-    def get_collection(self):
-        return self.data_base[self.COLLECTION_NAME]
+    def _create_transaction(self):
+        conn_string = f"user='{config.DB_USERNAME}' password='{config.DB_PASSWORD}' host='{config.DB_URL}' port='{config.DB_PORT}' dbname='{config.DB_NAME}'"
+        return psycopg2.connect(conn_string)

@@ -1,3 +1,4 @@
+import types
 from src.utils.validators.int_validator import IntValidator
 from src.utils.validators.float_validator import FloatValidator
 from src.models.base_model import BaseModel
@@ -29,5 +30,9 @@ class Measure(BaseModel):
         model = Measure()
         model.timestamp = get_json_prop(json, 'timestamp')
         model.voltage = get_json_prop(json, 'voltage')
+        if isinstance(model.voltage, int):
+            model.voltage = float(model.voltage)
         model.current = get_json_prop(json, 'current')
+        if isinstance(model.current, int):
+            model.current = float(model.current)
         return model

@@ -51,8 +51,7 @@ def test_create_returns_ok_when_user_is_created(controller):
     expected = 'new_user_id'
     controller.user_repository.insert = lambda x: expected
     actual = controller.create()
-    assert actual['code'] == 201
-    assert actual['body']['id'] == expected
+    assert actual['code'] == 200
 
 
 def test_get_logged_user_data_returns_error_when_user_not_found(controller):

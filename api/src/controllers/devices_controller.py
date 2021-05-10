@@ -41,5 +41,5 @@ class DevicesController(BaseController):
             self.device_repository.add_measure(measure, ble_id, user_id)
         except Exception as ex:
             Logger.get_logger(__file__).error(ex)
-            return self.error('An error has ocurred while creating the device')
+            return self.error('An error has ocurred while creating the measure')
         return self.ok_success()

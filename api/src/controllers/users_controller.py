@@ -21,7 +21,7 @@ class UsersController(BaseController):
             return self.error('User with same email already exists')
         #user.generate_verification_token()
         try:
-            user.user_id = self.user_repository.insert(user)
+            self.user_repository.insert(user)
         except Exception as ex:
             return self.error('An error has ocurred while creating user')
         # Enviamos mail de verificacion
@@ -32,7 +32,7 @@ class UsersController(BaseController):
             print(
                 F'Ha ocurrido un error al enviar el mail de verificacion para el usuario {user.username}: {ex}')
         """
-        return self.created_ok(user.user_id)
+        return self.ok_success()
 
     @http_method(http_methods.GET, auth_required=True)
     def get_logged_user_data(self) -> dict:
