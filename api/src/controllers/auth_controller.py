@@ -1,10 +1,8 @@
 import datetime
-from src.models.recovery_token import RecoveryToken
 import jwt
 from flask import jsonify
 from src.controllers.base_controller import BaseController, http_method
 from src.repositories.user_repository import UserRepository
-from src.repositories.recovery_token_repository import RecoveryTokenRepository
 from src.models.user import User
 import src.config as config
 from src.utils import http_methods
@@ -13,10 +11,14 @@ from src import config
 
 class AuthController(BaseController):
 
+    def __init__(self):
+        super().__init__()
+        self.user_repository = UserRepository()
+
     @http_method(http_methods.POST)
     def login(self) -> dict:
         body = self.get_json_body()
-        user = UserRepository().get_by_email(body['email'])
+        user = self.user_repository.get_by_email(body['email'])
         if user is None or not user.password_matches(body['password']):
             return self.error('Invalid email or password')
         """
@@ -31,8 +33,7 @@ class AuthController(BaseController):
         token_data = {
             'id': user.user_id,
             'email': user.email,
-            'timestamp': datetime.datetime.utcnow().timestamp(),
-            #'user_agent': self.request.headers['User-Agent']
+            'timestamp': datetime.datetime.utcnow().timestamp()
         }
         return jwt.encode(token_data, config.APP_SECRET, algorithm=config.HASH_ALGORITHM)
 
@@ -45,42 +46,11 @@ class AuthController(BaseController):
             return self.validation_error('No verificationToken provided')
         verified = False
         try:
-            verified = UserRepository().verify_user(user_id, body['verificationToken'])
+            verified = self.user_repository.verify_user(user_id, body['verificationToken'])
         except Exception as ex:
             return self.error(F'An error has occured while trying to verify user with id {user_id}')
         if not verified:
             return self.validation_error(F'Invalid userId or verificationToken')
-        return self.ok_success()
-
-    @http_method(http_methods.POST)
-    def send_verification_email(self, email: str) -> dict:
-        repo = UserRepository()
-        user = repo.get_by_email(email)
-        if not user or user.verified:
-            return self.validation_error('Invalid email to send verification email')
-        try:
-            user.send_verification_email()
-        except Exception as ex:
-            return self.error(F'An error has occured while trying to send verification email to {email}')
-        return self.ok_success()
-
-    @http_method(http_methods.POST)
-    def password_reset_request(self, email: str) -> dict:
-        repo = UserRepository()
-        user = repo.get_by_email(email)
-        if not user:
-            return self.error('No user registered with that email')
-        
-        reco_token = RecoveryToken(user.user_id)
-
-        try:
-            RecoveryTokenRepository().insert(reco_token)
-        except Exception as ex:
-            return self.error('Error generating token')
-        try:
-            user.send_reset_pass_email(reco_token.token_value)
-        except Exception as ex:
-            return self.error(F'An error has occured while trying to send password reset email to {email}')
         return self.ok_success()
 
     @http_method(http_methods.GET, auth_required=True)

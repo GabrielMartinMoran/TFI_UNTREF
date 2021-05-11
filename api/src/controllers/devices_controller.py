@@ -1,3 +1,4 @@
+from src.repositories.measure_repository import MeasureRepository
 from src.models.measure import Measure
 from src.utils.logger import Logger
 from src.controllers.base_controller import BaseController, http_method
@@ -11,6 +12,7 @@ class DevicesController(BaseController):
     def __init__(self):
         super().__init__()
         self.device_repository = DeviceRepository()
+        self.measure_repository = MeasureRepository()
 
     @http_method(http_methods.GET)
     def generate_ble_id(self, test_param) -> dict:
@@ -38,7 +40,7 @@ class DevicesController(BaseController):
         if not measure.is_valid():
             return self.validation_error(measure.validation_errors)
         try:
-            self.device_repository.add_measure(measure, ble_id, user_id)
+            self.measure_repository.insert(measure, ble_id, user_id)
         except Exception as ex:
             Logger.get_logger(__file__).error(ex)
             return self.error('An error has ocurred while creating the measure')

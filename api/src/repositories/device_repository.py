@@ -1,6 +1,3 @@
-import hashlib
-from src.models.measure import Measure
-from bson.objectid import ObjectId
 from src.models.device import Device
 from .base_repository import BaseRepository
 
@@ -14,11 +11,4 @@ class DeviceRepository(BaseRepository):
 
     def ble_id_exists_for_user(self, ble_id: str, user_id: int) -> bool:
         res = self._execute_query(f"SELECT COUNT(device_id) FROM Devices WHERE user_id = {user_id} AND ble_id = '{ble_id}'")
-        res.table['count'][0] > 0
-
-    def add_measure(self, measure: Measure, ble_id: str, user_id: int) -> None:
-        # TODO: Cambiar el tipo de dato del timestamp a datetime
-        self._execute_query(f"INSERT INTO Measures (device_id, voltage, current, timestamp) VALUES ("
-                            f"(SELECT device_id FROM Devices WHERE user_id = {user_id} AND ble_id = '{ble_id}'), "
-                            f"{measure.voltage}, {measure.current}, to_timestamp({measure.timestamp}))"
-        )
+        return res.table['count'][0] > 0
