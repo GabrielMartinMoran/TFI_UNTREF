@@ -4,8 +4,8 @@ from src.models.base_model import BaseModel
 from src.utils.json_utils import get_json_prop
 from src.utils.hashing import hash_password
 
-class User(BaseModel):
 
+class User(BaseModel):
     MIN_USER_LENGTH = 3
     MAX_USER_LENGTH = 32
 
@@ -16,16 +16,16 @@ class User(BaseModel):
         StringValidator('hashed_password', message='password is not valid'),
     ]
 
-    def __init__(self):
+    def __init__(self, username: str, email: str, user_id: int = None, password: str = None):
         super().__init__()
-        self.user_id = None
-        self.username = None
-        self.email = None
+        self.username = username
+        self.email = email.lower() if email else None
+        self.user_id = user_id
+        self.password = password
         self.avatar = None
-        self.password = None
         self.hashed_password = None
 
-    def to_json(self, include_hashed_password=False, creating_user=False):
+    def to_dict(self, include_hashed_password=False, creating_user: bool = False):
         result = {
             'username': self.username,
             'email': self.email,
@@ -38,20 +38,20 @@ class User(BaseModel):
         return result
 
     @staticmethod
-    def from_json(json):
-        model = User()
-        model.user_id = str(get_json_prop(json, 'id', '_id'))
-        model.username = get_json_prop(json, 'username')
-        model.email = get_json_prop(json, 'email').lower()
+    def from_dict(json) -> 'User':
+        model = User(
+            json.get('username'),
+            json.get('email'),
+            user_id=str(get_json_prop(json, 'id', '_id')),
+            password=json.get('password')
+        )
         model.avatar = get_json_prop(json, 'avatar')
-        model.bio = get_json_prop(json, 'bio')
-        model.password = get_json_prop(json, 'password')
         if 'createdDate' in json:
-            model.created_date = get_json_prop(json, 'createdDate')
+            model.created_date = json.get('createdDate')
         if model.password:
             model.hashed_password = hash_password(model.password)
         else:
-            model.hashed_password = get_json_prop(json, 'hashedPassword')
+            model.hashed_password = json.get('hashedPassword')
         return model
 
     def password_matches(self, non_hashed_password) -> bool:

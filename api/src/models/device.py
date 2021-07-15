@@ -3,8 +3,8 @@ from src.utils.validators.string_validator import StringValidator
 from src.models.base_model import BaseModel
 from src.utils.json_utils import get_json_prop
 
-class Device(BaseModel):
 
+class Device(BaseModel):
     MIN_NAME_LENGTH = 1
     MAX_NAME_LENGTH = 32
     BLE_ID_LENGTH = 36
@@ -14,35 +14,35 @@ class Device(BaseModel):
         StringValidator('ble_id', fixed_len=BLE_ID_LENGTH)
     ]
 
-    def __init__(self):
+    def __init__(self, name: str, ble_id: str, device_id: str = None, active: bool = False, turned_on: bool = False):
         super().__init__()
-        self.device_id = None
-        self.name = None
-        self.ble_id = None
+        self.name = name
+        self.ble_id = ble_id
+        self.device_id = device_id
+        self.active = active
+        self.turned_on = turned_on
         self.measures = []
-        self.active = False
-        self.turned_on = False
 
-    def to_json(self):
+    def to_dict(self):
         return {
             'id': self.device_id,
             'name': self.name,
             'bleId': self.ble_id,
-            'measures': [measure.to_json() for measure in self.measures],
+            'measures': [measure.to_dict() for measure in self.measures],
             'active': self.active,
             'turnedOn': self.turned_on
         }
 
     @staticmethod
-    def from_json(json):
-        model = Device()
-        model.device_id = str(get_json_prop(json, 'id', '_id') or '')
-        model.name = get_json_prop(json, 'name')
-        model.ble_id = (get_json_prop(json, 'bleId') or '').lower()
-        model.active = get_json_prop(json, 'active') or False
-        model.turned_on = get_json_prop(json, 'turnedOn') or False
-        if 'measures' in json:
-            model.measures = [Measure.from_json(x) for x in get_json_prop(json, 'measures')]
+    def from_dict(json):
+        model = Device(
+            json.get('name'),
+            json.get('bleId', '').lower(),
+            device_id=str(get_json_prop(json, 'id', '_id') or ''),
+            active=json.get('active', False),
+            turned_on=json.get('turnedOn', False),
+        )
+        model.measures = [Measure.from_dict(x) for x in json.get('measures', [])]
         if 'createdDate' in json:
             model.created_date = get_json_prop(json, 'createdDate')
         return model

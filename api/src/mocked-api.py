@@ -6,8 +6,41 @@ import random
 from datetime import datetime
 from werkzeug.serving import WSGIRequestHandler
 
-from models.device import Device
-from models.measure import Measure
+
+class Device:
+
+    def __init__(self, name: str, ble_id: str, active=True, turned_on=True):
+        self.name = name
+        self.ble_id = ble_id
+        self.active = active
+        self.turned_on = turned_on
+        self.measures = []
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'bleId': self.ble_id,
+            'measures': [measure.to_dict() for measure in self.measures],
+            'active': self.active,
+            'turnedOn': self.turned_on
+        }
+
+
+class Measure:
+
+    def __init__(self, voltage: float, current: float, timestamp: int):
+        self.voltage = voltage
+        self.current = current
+        self.timestamp = timestamp
+
+    def to_dict(self):
+        return {
+            'timestamp': self.timestamp,
+            'voltage': self.voltage,
+            'current': self.current,
+            'power': self.current * self.voltage
+        }
+
 
 app = Flask(__name__)
 CORS(app)
@@ -23,16 +56,17 @@ data = [
     Device('Computadora', 'c80fbd68-9ee9-11eb-a8b3-0242ac130003', active=True, turned_on=False),
 ]
 
+
 def data_generating_thread():
     global data
     loop = True
-    while(loop):
+    while (loop):
         for device in data:
-            device.add_measure(
+            device.measures.append(
                 Measure(
                     REF_VOLTAGE + random.uniform(-10, 10),
                     random.uniform(0, 1),
-                    int(datetime.now().timestamp())# * 1000)
+                    int(datetime.now().timestamp())  # * 1000)
                 )
             )
         time.sleep(5)
@@ -42,6 +76,7 @@ def data_generating_thread():
 @app.route('/get_data', methods=['GET'])
 def get_data():
     return jsonify([device.to_dict() for device in data])
+
 
 if __name__ == '__main__':
     thread = Thread(target=data_generating_thread)

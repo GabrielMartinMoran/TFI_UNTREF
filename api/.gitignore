@@ -141,3 +141,5 @@ cython_debug/
 *.pyc
 
 logs
+
+.idea

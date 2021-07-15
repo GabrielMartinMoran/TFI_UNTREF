@@ -26,7 +26,8 @@ def test_create_returns_validation_error_when_user_in_json_body_is_not_valid(con
 
 def test_create_returns_error_when_user_with_same_email_already_exists(controller):
     controller.get_json_body = lambda: {
-        'email': 'test@email.com', 'password': 'Passw0rd', 'username': 'Username', 'preferredLanguage': 'ES', 'preferredCurrency': 'ARS'}
+        'email': 'test@email.com', 'password': 'Passw0rd', 'username': 'Username', 'preferredLanguage': 'ES',
+        'preferredCurrency': 'ARS'}
     controller.user_repository.email_exists = lambda x: True
     actual = controller.create()
     assert actual['code'] == 500
@@ -62,8 +63,7 @@ def test_get_logged_user_data_returns_error_when_user_not_found(controller):
 
 
 def test_get_logged_user_data_returns_user_when_user_found(controller):
-    user = User()
-    user.user_id = 'user_id'
+    user = User('test_username', 'test@test.com', user_id='user_id')
     controller.user_repository.get_by_id = lambda id, get_avatar: user
     actual = controller.get_logged_user_data()
     assert actual['code'] == 200

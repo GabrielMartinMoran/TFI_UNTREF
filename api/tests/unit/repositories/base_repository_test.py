@@ -1,5 +1,4 @@
-import pytest
-from tests.repositories.mocked_cursor import MockedCursor
+from tests.unit.repositories.mocked_cursor import MockedCursor
 import pytest
 from src.repositories.base_repository import BaseRepository
 from src.repositories import base_repository

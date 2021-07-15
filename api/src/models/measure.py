@@ -1,24 +1,22 @@
-import types
 from src.utils.validators.int_validator import IntValidator
 from src.utils.validators.float_validator import FloatValidator
 from src.models.base_model import BaseModel
-from src.utils.json_utils import get_json_prop
+
 
 class Measure(BaseModel):
-
     MODEL_VALIDATORS = [
         IntValidator('timestamp', min=0),
         FloatValidator('voltage', min=0),
         FloatValidator('current', min=0),
     ]
 
-    def __init__(self):
+    def __init__(self, timestamp: int, voltage: float, current: float):
         super().__init__()
-        self.timestamp = None
-        self.voltage = None
-        self.current = None
+        self.timestamp = timestamp
+        self.voltage = voltage
+        self.current = current
 
-    def to_json(self):
+    def to_dict(self):
         return {
             'timestamp': self.timestamp,
             'voltage': self.voltage,
@@ -26,13 +24,14 @@ class Measure(BaseModel):
         }
 
     @staticmethod
-    def from_json(json):
-        model = Measure()
-        model.timestamp = get_json_prop(json, 'timestamp')
-        model.voltage = get_json_prop(json, 'voltage')
+    def from_dict(json):
+        model = Measure(
+            json.get('timestamp'),
+            json.get('voltage'),
+            json.get('current'),
+        )
         if isinstance(model.voltage, int):
             model.voltage = float(model.voltage)
-        model.current = get_json_prop(json, 'current')
         if isinstance(model.current, int):
             model.current = float(model.current)
         return model

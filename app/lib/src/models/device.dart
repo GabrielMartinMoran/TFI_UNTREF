@@ -18,7 +18,7 @@ class Device {
   factory Device.fromJson(Map<String, dynamic> json) => Device(
         bleId: json["bleId"],
         measurements: List<Measurement>.from(
-            json["measurements"].map((x) => Measurement.fromJson(x))),
+            json["measures"].map((x) => Measurement.fromJson(x))),
         name: json["name"],
         active: json["active"],
         turnedOn: json["turnedOn"],

@@ -13,11 +13,13 @@ class UserRepository(BaseRepository):
 
     def get_by_email(self, email: str) -> User:
         res = self._execute_query(f"SELECT * FROM Users WHERE email = '{email}'")
-        return res.first_to_model(User())
+        # TODO: Cambiar esto
+        return res.first_to_model(User(None, None))
 
     def get_by_id(self, user_id: int, get_avatar=False) -> User:
         res = self._execute_query(f"SELECT * FROM Users WHERE user_id = '{user_id}'")
-        model = res.first_to_model(User())
+        # TODO: Cambiar esto
+        model = res.first_to_model(User(None, None))
         if get_avatar:
             model.avatar = self.get_user_avatar(model.email)
         return model
@@ -28,14 +30,16 @@ class UserRepository(BaseRepository):
         return ImageEncoder.to_base_64_str(response.content)
 
     def insert(self, model: User):
-        self._execute_query(f"INSERT INTO Users (username, email, hashed_password) VALUES ({model.username, model.email, model.hashed_password})")
+        self._execute_query(f"INSERT INTO Users (username, email, hashed_password) VALUES ('{model.username}', "
+                            f"'{model.email}', '{model.hashed_password}')")
 
     def get(self, user_id: int):
         res = self._execute_query(f"SELECT * FROM Users WHERE user_id = {user_id}")
-        return res.first_to_model(User())
+        # TODO: Cambiar esto
+        return res.first_to_model(User(None, None))
 
     def update_password(self, user_id: int, hashed_pass: str) -> bool:
         res = self._execute_query(f"UPDATE Users SET hashed_password = '{hashed_pass}' WHERE user_id = {user_id}")
         return res.rows_affected == 1
-        #cursor = self._execute_query(f"SELECT COUNT(user_id) FROM Users WERE user_id = {user_id} AND hashed_password = '{hashed_pass}'")
-        #return cursor.fetchone()[0] == 1
+        # cursor = self._execute_query(f"SELECT COUNT(user_id) FROM Users WERE user_id = {user_id} AND hashed_password = '{hashed_pass}'")
+        # return cursor.fetchone()[0] == 1

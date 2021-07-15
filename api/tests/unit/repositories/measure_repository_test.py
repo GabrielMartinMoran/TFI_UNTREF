@@ -1,4 +1,4 @@
-from tests.repositories.mocked_cursor import MockedCursor
+from tests.unit.repositories.mocked_cursor import MockedCursor
 import pytest
 from src.models.measure import Measure
 from src.repositories.measure_repository import MeasureRepository
@@ -25,6 +25,6 @@ mocked_ble_id = 5
 
 def test_insert_adds_measure_to_measures_table(repository: MeasureRepository):
     mocked_cursor.prepare({})
-    measure = Measure()
+    measure = Measure(1000000, 220.0, 1.0)
     repository.insert(measure, mocked_ble_id, mocked_user_id)
     assert 'insert into measures' in mocked_cursor.executed_query.lower()

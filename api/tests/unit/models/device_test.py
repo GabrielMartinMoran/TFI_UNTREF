@@ -5,18 +5,16 @@ from src.models.measure import Measure
 
 @pytest.fixture
 def device():
-    device = Device()
-    device.device_id = '1234'
-    device.name = 'device_name'
-    device.ble_id = 'e348ae42-ebb0-4453-a12f-c05bdadd1479'
-    device.active = True
-    device.turned_on = True
-    measure = Measure()
-    measure.timestamp = 10000
-    measure.voltage = 220.0
-    measure.current = 1.0
-    device.measures = [measure]
+    device = Device(
+        'device_name',
+        'e348ae42-ebb0-4453-a12f-c05bdadd1479',
+        device_id='1234',
+        active=True,
+        turned_on=True
+    )
+    device.measures = [Measure(timestamp=10000, voltage=220.0, current=1.0)]
     return device
+
 
 @pytest.fixture
 def device_json():
@@ -34,31 +32,38 @@ def device_json():
         }]
     }
 
+
 def test_is_valid_returns_false_when_name_is_null(device):
     device.name = None
     assert not device.is_valid()
+
 
 def test_is_valid_returns_false_when_name_len_greater_than_32(device):
     device.name = 'A' * 33
     assert not device.is_valid()
 
+
 def test_is_valid_returns_false_when_name_len_is_lower_than_1(device):
     device.name = ''
     assert not device.is_valid()
+
 
 def test_is_valid_returns_false_when_ble_id_is_null(device):
     device.ble_id = None
     assert not device.is_valid()
 
+
 def test_is_valid_returns_false_when_ble_id_is_invalid(device):
     device.ble_id = 'invalid_ble_id'
     assert not device.is_valid()
 
+
 def test_is_valid_returns_true_when_all_properties_are_valid(device):
     assert device.is_valid()
 
+
 def test_from_json_returns_device_when_json_is_provided(device_json):
-    actual = Device.from_json(device_json)
+    actual = Device.from_dict(device_json)
     assert actual.device_id == device_json['id']
     assert actual.name == device_json['name']
     assert actual.ble_id == device_json['bleId']
@@ -69,8 +74,9 @@ def test_from_json_returns_device_when_json_is_provided(device_json):
     assert actual.measures[0].voltage == device_json['measures'][0]['voltage']
     assert actual.measures[0].current == device_json['measures'][0]['current']
 
+
 def test_to_json_returns_device_as_json_when_called(device):
-    actual = device.to_json()
+    actual = device.to_dict()
     assert actual['id'] == device.device_id
     assert actual['name'] == device.name
     assert actual['bleId'] == device.ble_id

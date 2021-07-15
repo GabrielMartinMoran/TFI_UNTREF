@@ -3,7 +3,6 @@ import datetime
 
 
 class BaseModel:
-
     MODEL_VALIDATORS = []
 
     def __init__(self):
@@ -14,7 +13,7 @@ class BaseModel:
         self.validate()
         return len(self.validation_errors) == 0
 
-    def to_json(self) -> dict:
+    def to_dict(self) -> dict:
         raise NotImplementedError()
 
     def validate(self):
@@ -24,7 +23,7 @@ class BaseModel:
                 self.validation_errors.append(validator.get_failed_message())
 
     @staticmethod
-    def from_json(json):
+    def from_dict(json):
         model = BaseModel()
         if 'createdDate' in json:
             model.created_date = get_json_prop(json, 'createdDate')

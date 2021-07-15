@@ -12,7 +12,7 @@ class UsersController(BaseController):
 
     @http_method(http_methods.POST)
     def create(self) -> dict:
-        user = User.from_json(self.get_json_body())
+        user = User.from_dict(self.get_json_body())
         if not user.is_valid():
             return self.validation_error(user.validation_errors)
         if self.user_repository.email_exists(user.email):
@@ -37,4 +37,4 @@ class UsersController(BaseController):
         user = self.user_repository.get_by_id(user_id, get_avatar=True)
         if not user:
             return self.error('Invalid user')
-        return self.ok_success(user.to_json())
+        return self.ok_success(user.to_dict())
