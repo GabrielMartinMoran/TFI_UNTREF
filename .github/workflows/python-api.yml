@@ -10,7 +10,7 @@ on:
     branches: [ dev, stag, main ]
 
 jobs:
-  Python API testing:
+  Python_API_testing:
 
     runs-on: ubuntu-latest
 
