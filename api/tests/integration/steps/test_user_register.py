@@ -2,7 +2,7 @@ from pytest_bdd import given, scenarios, then, when, parsers
 
 from tests.integration.steps import controllers_factory
 
-scenarios('user_register.feature')
+scenarios('../features/user_register.feature')
 
 last_response = None
 
