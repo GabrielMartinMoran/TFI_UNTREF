@@ -9,7 +9,6 @@ from src.database.migrations.migration_001 import Migration001
 
 
 class DBMigrator:
-
     MIGRATIONS = [
         Migration001
     ]
@@ -23,10 +22,11 @@ class DBMigrator:
         db_exists = True
         conn = self.__get_db_connection(specify_database=False)
         # Porque no es posible crear la base en transaccion
-        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT);
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = conn.cursor()
         try:
-            cursor.execute(f"SELECT COUNT(DATNAME) FROM PG_CATALOG.PG_DATABASE WHERE LOWER(DATNAME) = LOWER('{config.DB_NAME}')")
+            cursor.execute(
+                f"SELECT COUNT(DATNAME) FROM PG_CATALOG.PG_DATABASE WHERE LOWER(DATNAME) = LOWER('{config.DB_NAME}')")
             db_exists = cursor.fetchone()[0] > 0
             if not db_exists:
                 cursor.execute(f"CREATE DATABASE {config.DB_NAME}")
@@ -37,7 +37,19 @@ class DBMigrator:
         if not db_exists:
             self.__create_app_info()
 
-    def __get_db_connection(self, specify_database = True):
+    # Solo para testing
+    def drop_db(self):
+        conn = self.__get_db_connection(specify_database=False)
+        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cursor = conn.cursor()
+        try:
+            cursor.execute(f"DROP DATABASE {config.DB_NAME}")
+        except Exception as e:
+            raise Exception(e)
+        finally:
+            conn.close()
+
+    def __get_db_connection(self, specify_database=True):
         conn_string = f"user='{config.DB_USERNAME}' password='{config.DB_PASSWORD}' host='{config.DB_URL}' port='{config.DB_PORT}'"
         if specify_database:
             conn_string += f" dbname='{config.DB_NAME}'"
@@ -48,14 +60,14 @@ class DBMigrator:
         cursor = conn.cursor()
         try:
             cursor.execute("CREATE TABLE AppInfo (key VARCHAR(255) PRIMARY KEY, value VARCHAR(255) NOT NULL)")
-            cursor.execute(f"INSERT INTO AppInfo (key, value) VALUES ('{config.LAST_MIGRATION_APP_INFO_KEY}', 0), ('{config.LAST_MIGRATION_APP_INFO_DATE}', NOW())")
+            cursor.execute(
+                f"INSERT INTO AppInfo (key, value) VALUES ('{config.LAST_MIGRATION_APP_INFO_KEY}', 0), ('{config.LAST_MIGRATION_APP_INFO_DATE}', NOW())")
             conn.commit()
         except Exception as e:
             conn.rollback()
             raise Exception(e)
         finally:
             conn.close()
-
 
     def run_migrations(self):
         print(F'{console_colors.INFO}Corriendo migraciones de la base de datos:{console_colors.ENDC}')
@@ -102,8 +114,10 @@ class DBMigrator:
         self.update_to_last_migration(migration_class.MIGRATION_NUMBER, cursor)
 
     def update_to_last_migration(self, last_migration_number: int, cursor: object):
-        cursor.execute(f"UPDATE AppInfo SET value = '{last_migration_number}' WHERE key = '{config.LAST_MIGRATION_APP_INFO_KEY}'")
-        cursor.execute(f"UPDATE AppInfo SET value = '{datetime.datetime.now()}' WHERE key = '{config.LAST_MIGRATION_APP_INFO_DATE}'")
+        cursor.execute(
+            f"UPDATE AppInfo SET value = '{last_migration_number}' WHERE key = '{config.LAST_MIGRATION_APP_INFO_KEY}'")
+        cursor.execute(
+            f"UPDATE AppInfo SET value = '{datetime.datetime.now()}' WHERE key = '{config.LAST_MIGRATION_APP_INFO_DATE}'")
 
     def get_migration_filename(self, migration_class):
         return os.path.split(sys.modules[migration_class.__module__].__file__)[1]

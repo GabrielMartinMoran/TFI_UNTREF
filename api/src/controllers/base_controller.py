@@ -13,17 +13,18 @@ def normalize_alias(alias: str) -> Optional[str]:
 def http_method(method_type: str, alias: str = None, auth_required: bool = False):
     def wrapper(func):
         Router.register_http_method({
-                'type': method_type,
-                'alias': normalize_alias(alias),
-                'class_name': func.__qualname__.split('.')[0],
-                'method_name': func.__name__,
-                'auth_required': auth_required
-            })
+            'type': method_type,
+            'alias': normalize_alias(alias),
+            'class_name': func.__qualname__.split('.')[0],
+            'method_name': func.__name__,
+            'auth_required': auth_required
+        })
         return func
+
     return wrapper
 
 
-class BaseController():
+class BaseController:
 
     def __init__(self):
         self.request = None
@@ -53,8 +54,9 @@ class BaseController():
     def error(self, message):  # pylint: disable=no-self-use
         return self.__jsonify_response({'message': message}, 500)
 
-    def validation_error(self, attributes_with_errors):  # pylint: disable=no-self-use
-        return self.__jsonify_response({'invalid_properties': attributes_with_errors}, 400)
+    def validation_error(self, validation_errors):  # pylint: disable=no-self-use
+        #return self.__jsonify_response({'invalid_properties': attributes_with_errors}, 400)
+        return self.__jsonify_response({'message': f'Validation error: {", ".join(validation_errors)}'}, 400)
 
     def get_authenticated_user_id(self):
         if self.token and 'id' in self.token:

@@ -4,6 +4,7 @@ from src.repositories.user_repository import UserRepository
 from src.models.user import User
 import src.utils.http_methods as http_methods
 
+
 class UsersController(BaseController):
 
     def __init__(self):

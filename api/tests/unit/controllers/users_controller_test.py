@@ -21,7 +21,7 @@ def test_create_returns_validation_error_when_user_in_json_body_is_not_valid(con
         'email': 'invalid_email', 'password': 'Passw0rd', 'username': 'Username'}
     actual = controller.create()
     assert actual['code'] == 400
-    assert 'email' in actual['body']['invalid_properties'][0]
+    assert 'email' in actual['body']['message']
 
 
 def test_create_returns_error_when_user_with_same_email_already_exists(controller):
