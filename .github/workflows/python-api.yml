@@ -50,6 +50,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
+        DB_URL: postgres
         DB_USERNAME: postgres
         DB_PASSWORD: postgres
       working-directory: ./api

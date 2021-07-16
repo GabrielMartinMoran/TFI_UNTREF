@@ -8,8 +8,6 @@ DROP_DB = True
 def setup_database():
     global migrator
     print('Setting up testing database')
-    config.DB_URL = 'localhost'
-    config.DB_PORT = '5432'
     config.DB_NAME = 'devices_management_test'
     # DB_USERNAME and DB_PASSWORD must be set as env var
     migrator = DBMigrator()
