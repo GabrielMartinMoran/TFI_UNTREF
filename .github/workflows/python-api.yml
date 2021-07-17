@@ -61,8 +61,9 @@ jobs:
         python -m pytest tests --cov=. --cov-config=.coveragerc --cov-report xml:cov.xml --gherkin-terminal-reporter -vv
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v1
+      env:
+        CODECOV_TOKEN: ${{ secrets.PYTHON_API_CODECOV_SECRET }}
       with:
-        token: ${{ secrets.PYTHON_API_CODECOV_SECRET }}
         files: ./api/cov.xml
         fail_ci_if_error: true
 
