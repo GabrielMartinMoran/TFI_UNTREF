@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/GabrielMartinMoran/TFI_UNTREF/branch/main/graph/badge.svg?token=1UE896UZ8A)](https://codecov.io/gh/GabrielMartinMoran/TFI_UNTREF)
+
 # Trabajo Final Integrador - Ingenierría en Computación - UNTREF
 ## Controlador de encendido y consumo eléctrico
 
