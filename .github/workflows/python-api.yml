@@ -59,16 +59,11 @@ jobs:
       working-directory: ./api
       run: |
         python -m pytest tests --cov=. --cov-config=.coveragerc --cov-report xml:cov.xml --gherkin-terminal-reporter -vv
-    
-    steps:
-    - uses: codecov/codecov-action@v1
-    - name: Upload coverage to codecov
+    - name: "Upload coverage to Codecov"
+      uses: codecov/codecov-action@v1
+      working-directory: ./api
       with:
-        working-directory: ./api
-        token: ${{ secrets.PYTHON_API_CODECOV_SECRET }} # not required for public repos
+        token: ${{ secrets.PYTHON_API_CODECOV_SECRET }}
         files: ./cov.xml
-        flags: unittests # optional
-        name: codecov-umbrella # optional
-        fail_ci_if_error: true # optional (default = false)
-        verbose: true # optional (default = false)
+        fail_ci_if_error: true
 
