@@ -58,5 +58,5 @@ jobs:
         DB_PASSWORD: postgres
       working-directory: ./api
       run: |
-        python -m pytest --cov=. --cov-config=.coveragerc --gherkin-terminal-reporter tests
+        python -m pytest tests --cov=. --cov-config=.coveragerc --cov-report xml:cov.xml --gherkin-terminal-reporter -vv
 
