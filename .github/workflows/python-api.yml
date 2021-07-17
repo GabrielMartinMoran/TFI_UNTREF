@@ -60,8 +60,11 @@ jobs:
       run: |
         python -m pytest tests --cov=. --cov-config=.coveragerc --cov-report xml:cov.xml --gherkin-terminal-reporter -vv
     - name: Upload coverage to codecov
+      uses: actions/checkout@master
+      uses: codecov/codecov-action@v1
       working-directory: ./api
       with:
+        uses: actions/checkout@master
         token: ${{ secrets.PYTHON_API_CODECOV_SECRET }} # not required for public repos
         files: ./cov.xml
         flags: unittests # optional
